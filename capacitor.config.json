@@ -1,0 +1,13 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "remind.io",
+  "bundledWebRuntime": true,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

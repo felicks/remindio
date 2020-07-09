@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-tab2',
@@ -6,7 +10,41 @@ import { Component } from '@angular/core';
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page {
+  image: any
+  imageArray: any;
+  link: any; 
+  date
+  constructor(private afs: AngularFirestore, private afStorage: AngularFireStorage) {
 
-  constructor() {}
+    this.image = afs.collection('/images').valueChanges()
 
+    this.imageArray = []
+
+    this.image.forEach(element => {
+    
+      if(this.imageArray.length <= 1){
+        this.imageArray = [element]
+      }else{
+        
+        this.imageArray.push(element)
+      }
+   
+    });
+
+    setTimeout(() => {
+      this.loadImage()
+    }, 1500);
+  }
+
+  loadImage(){
+    console.log(this.imageArray[0].length)
+    var randomID = Math.floor(Math.random() * Math.floor(this.imageArray[0].length));
+    console.log(randomID)
+    var src = this.imageArray[0][randomID].src
+    this.date = this.imageArray[0][randomID].timestamp
+    console.log(this.date)
+    this.afStorage.ref(src).getDownloadURL().subscribe(link => {
+      this.link = link;
+      })
+  }
 }
