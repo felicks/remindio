@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/storage';
+import {AuthenticationService } from '../shared/authentication-service';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-tab2',
@@ -14,26 +14,25 @@ export class Tab2Page {
   imageArray: any;
   link: any; 
   date
-  constructor(private afs: AngularFirestore, private afStorage: AngularFireStorage) {
+  user: any; 
 
+  constructor(private router: Router, private afs: AngularFirestore, private afStorage: AngularFireStorage, private auth: AuthenticationService) {
+    this.user = JSON.parse(this.auth.getUserData())
     this.image = afs.collection('/images').valueChanges()
 
     this.imageArray = []
 
     this.image.forEach(element => {
-    
       if(this.imageArray.length <= 1){
         this.imageArray = [element]
       }else{
-        
         this.imageArray.push(element)
       }
-   
     });
 
     setTimeout(() => {
       this.loadImage()
-    }, 1500);
+    }, 500);
   }
 
   loadImage(){
@@ -46,5 +45,8 @@ export class Tab2Page {
     this.afStorage.ref(src).getDownloadURL().subscribe(link => {
       this.link = link;
       })
+  }
+  goToLogin(){
+    this.router.navigate(['']);
   }
 }

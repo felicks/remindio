@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AuthenticationService } from '../shared/authentication-service'
 
 @Component({
   selector: 'app-tab3',
@@ -6,7 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['tab3.page.scss']
 })
 export class Tab3Page {
+  user:any; 
 
-  constructor() {}
+  constructor(private auth: AuthenticationService) {
+    this.user = JSON.parse(this.auth.getUserData())
+  }
+
 
 }

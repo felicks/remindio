@@ -16,11 +16,12 @@ import { Capacitor } from '@capacitor/core';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireStorage  } from '@angular/fire/storage';
+import {AngularFireAuthModule } from '@angular/fire/auth'
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,  AngularFireModule.initializeApp(environment.firebaseConfig),
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AngularFireAuthModule, AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
   
      ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],

@@ -3,6 +3,9 @@ import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import {AuthenticationService } from '../shared/authentication-service';
+import { Router } from "@angular/router";
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -15,9 +18,14 @@ export class Tab1Page {
   task: any; 
   file: any; 
   uploaded: boolean = false; 
+  user:any; 
 
-  constructor(private afs: AngularFirestore, private sanitizer: DomSanitizer,private afStorage: AngularFireStorage,) {}
-
+  constructor(private router: Router, private afs: AngularFirestore, private sanitizer: DomSanitizer,private afStorage: AngularFireStorage,private auth: AuthenticationService) {
+    
+  }
+  ngOnInit(){
+    this.user = JSON.parse(this.auth.getUserData())
+  }
   async takePicture() {
     const image = await Plugins.Camera.getPhoto({
       quality: 100,
@@ -73,7 +81,8 @@ export class Tab1Page {
     this.afs.collection('/images').doc(filename).set(
       { 
         src: 'images/' + filename,
-        timestamp: date
+        timestamp: date,
+        uid: this.user.uuid
       });
 
     return new Promise((resolve, reject) => {
@@ -82,7 +91,9 @@ export class Tab1Page {
         console.log('Uploaded a data_url string!');
       });
     });
+  }
 
-
+  goToLogin(){
+    this.router.navigate(['']);
   }
 }

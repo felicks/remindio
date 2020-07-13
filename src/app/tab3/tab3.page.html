@@ -13,5 +13,19 @@
     </ion-toolbar>
   </ion-header>
 
-  
+  <div style="text-align: center;">
+    <p>This is a project by<br>  <strong>Felix Neumann </strong> <br> HTWK Leipzig 2020</p>
+    <ion-button size="small" color="primary"  horizontal="center" href="mailto:felix.neumann2707@gmail.com">Contact me</ion-button> <br>
+    <div *ngIf="user.email">
+      <h4 style="margin-top: 15%">{{user.email}}</h4>
+      <ion-button  size="small" color="danger"  horizontal="center" (click)="auth.SignOut()">Logout</ion-button>
+    </div>
+    <ion-card style="text-align: center;" *ngIf="!user">
+      <ion-card-title style="text-align: center;">You are not logged in!</ion-card-title>
+      <ion-card-content>
+        <ion-button size="small" color="primary" click="goToLogin()" margin="10" horizontal="center">Go To Login Page</ion-button>
+      </ion-card-content>
+    </ion-card>
+      
+  </div>
 </ion-content>
