@@ -11,6 +11,7 @@ export class Tab3Page {
 
   constructor(private auth: AuthenticationService) {
     this.user = JSON.parse(this.auth.getUserData())
+    console.log(this.auth.isLoggedIn)
   }
 
 

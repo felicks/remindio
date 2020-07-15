@@ -14,14 +14,16 @@ export class LoginPage implements OnInit {
     public router: Router) { }
 
   ngOnInit() {
-    console.log(this.authService.isLoggedIn)
+    if(this.authService.isLoggedIn){
+      this.router.navigateByUrl('/app/tabs/tab2');  
+    }
   }
 
   logIn(email, password) {
     this.authService.SignIn(email.value, password.value)
       .then((res) => {
         if(this.authService.isEmailVerified) {
-          this.router.navigateByUrl('/app/tabs/tab1');  
+          this.router.navigateByUrl('/app/tabs/tab2');  
         } else {
           window.alert('Email is not verified')
           return false;

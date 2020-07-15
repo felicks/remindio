@@ -3,7 +3,7 @@ import { Plugins, CameraResultType, CameraSource } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import {AuthenticationService } from '../shared/authentication-service';
+import { AuthenticationService } from '../shared/authentication-service';
 import { Router } from "@angular/router";
 
 @Component({
@@ -18,7 +18,8 @@ export class Tab1Page {
   task: any; 
   file: any; 
   uploaded: boolean = false; 
-  user:any; 
+  user:any;
+  reminder: any; 
 
   constructor(private router: Router, private afs: AngularFirestore, private sanitizer: DomSanitizer,private afStorage: AngularFireStorage,private auth: AuthenticationService) {
     
@@ -35,7 +36,6 @@ export class Tab1Page {
     });
 
     this.photo = 'data:image/jpg;base64,'+  image.base64String
-    console.log(image.base64String)
     let uploadInfo: any = await this.uploadToFirebase(image.base64String);
   }
 
@@ -82,7 +82,7 @@ export class Tab1Page {
       { 
         src: 'images/' + filename,
         timestamp: date,
-        uid: this.user.uuid
+        uid: this.user.uid
       });
 
     return new Promise((resolve, reject) => {

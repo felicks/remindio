@@ -3,6 +3,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { AngularFireStorage } from '@angular/fire/storage';
 import {AuthenticationService } from '../shared/authentication-service';
 import { Router } from "@angular/router";
+import { HttpClient } from '@angular/common/http'
 
 @Component({
   selector: 'app-tab2',
@@ -16,10 +17,10 @@ export class Tab2Page {
   date
   user: any; 
 
-  constructor(private router: Router, private afs: AngularFirestore, private afStorage: AngularFireStorage, private auth: AuthenticationService) {
+  constructor(public http: HttpClient, private router: Router, private afs: AngularFirestore, private afStorage: AngularFireStorage, private auth: AuthenticationService) {
     this.user = JSON.parse(this.auth.getUserData())
     this.image = afs.collection('/images').valueChanges()
-
+    console.log(this.auth.isLoggedIn)
     this.imageArray = []
 
     this.image.forEach(element => {
@@ -29,23 +30,32 @@ export class Tab2Page {
         this.imageArray.push(element)
       }
     });
-
-    setTimeout(() => {
-      this.loadImage()
-    }, 500);
+   this.getReminder();
   }
 
-  loadImage(){
-    console.log(this.imageArray[0].length)
-    var randomID = Math.floor(Math.random() * Math.floor(this.imageArray[0].length));
-    console.log(randomID)
-    var src = this.imageArray[0][randomID].src
-    this.date = this.imageArray[0][randomID].timestamp
-    console.log(this.date)
-    this.afStorage.ref(src).getDownloadURL().subscribe(link => {
-      this.link = link;
-      })
+
+
+ getReminder(){
+    console.log("Get Reminder")
+    this.http.get("https://us-central1-remindio.cloudfunctions.net/getReminder" + "/1").subscribe(
+      (val) => {
+        for (var message in val) {
+          console.log(val);
+          this.date = val["timestamp"]
+          this.afStorage.ref(val["src"]).getDownloadURL().subscribe(link => {
+            this.link = link;
+            })
+        }
+        
+      },
+      response => {
+        console.log("GET call in error", response);
+      },
+      () => {
+        console.log("The GET observable is now completed.");
+      });
   }
+
   goToLogin(){
     this.router.navigate(['']);
   }
